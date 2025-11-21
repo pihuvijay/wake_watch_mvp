@@ -17,12 +17,14 @@ import SignupScreen from '@screens/auth/SignupScreen';
 import LoginScreen from '@screens/auth/LoginScreen';
 import ForgotPasswordScreen from '@screens/auth/ForgotPasswordScreen';
 import ProfileSetupScreen from '@screens/auth/ProfileSetupScreen';
+import DashboardScreen from '@screens/main/DashboardScreen';
 
 export type AuthStackParamList = {
   Signup: undefined;
   Login: undefined;
   ForgotPassword: undefined;
   ProfileSetup: undefined;
+  Dashboard: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -76,6 +78,13 @@ const AuthNavigator: React.FC = () => {
         component={ProfileSetupScreen}
         options={{
           title: 'Profile Setup',
+        }}
+      />
+      <Stack.Screen 
+        name="Dashboard" 
+        component={DashboardScreen}
+        options={{
+          title: 'Dashboard',
         }}
       />
     </Stack.Navigator>
