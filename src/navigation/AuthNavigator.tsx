@@ -22,6 +22,7 @@ import TripHistoryScreen from '@screens/main/TripHistoryScreen';
 import AnalyticsScreen from '@screens/main/AnalyticsScreen';
 import SettingsScreen from '@screens/main/SettingsScreen';
 import NotificationsScreen from '@screens/main/NotificationsScreen';
+import ActiveDrivingScreen from '@screens/main/ActiveDrivingScreen';
 
 export type AuthStackParamList = {
   Signup: undefined;
@@ -33,6 +34,7 @@ export type AuthStackParamList = {
   Analytics: undefined;
   Settings: undefined;
   Notifications: undefined;
+  ActiveDriving: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -121,6 +123,13 @@ const AuthNavigator: React.FC = () => {
         component={NotificationsScreen}
         options={{
           title: 'Notifications',
+        }}
+      />
+      <Stack.Screen 
+        name="ActiveDriving" 
+        component={ActiveDrivingScreen}
+        options={{
+          title: 'Active Driving',
         }}
       />
     </Stack.Navigator>

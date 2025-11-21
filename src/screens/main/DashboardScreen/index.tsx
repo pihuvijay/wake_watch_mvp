@@ -85,6 +85,8 @@ const DashboardScreen: React.FC<DashboardProps> = ({ onNavigate }) => {
         navigation.navigate('Settings' as never);
       } else if (screen === 'notifications') {
         navigation.navigate('Notifications' as never);
+      } else if (screen === 'active-driving') {
+        navigation.navigate('ActiveDriving' as never);
       }
     }
   };
