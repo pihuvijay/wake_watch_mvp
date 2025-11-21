@@ -75,6 +75,14 @@ const DashboardScreen: React.FC<DashboardProps> = ({ onNavigate }) => {
       onNavigate(screen);
     } else {
       console.log(`Navigate to: ${screen}`);
+      // Handle navigation based on screen
+      if (screen === 'trip-history') {
+        navigation.navigate('TripHistory' as never);
+      } else if (screen === 'analytics') {
+        navigation.navigate('Analytics' as never);
+      } else if (screen === 'settings') {
+        navigation.navigate('Settings' as never);
+      }
     }
   };
 
