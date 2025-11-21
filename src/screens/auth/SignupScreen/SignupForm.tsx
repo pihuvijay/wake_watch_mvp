@@ -119,7 +119,7 @@ const SignupForm: React.FC<SignupFormProps> = ({
         title="Create Account"
         onPress={onSubmit}
         loading={loading}
-        disabled={loading || !formData.email || !formData.password || !formData.confirmPassword}
+        disabled={loading}
         style={styles.submitButton}
         testID="signup-submit-button"
       />

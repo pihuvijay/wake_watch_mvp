@@ -75,14 +75,34 @@ const SignupScreen: React.FC = () => {
    * Handles form submission for email/password signup
    */
   const handleSignup = async () => {
+    console.log('handleSignup called');
+    console.log('Form data:', formData);
+    
+    // TEMPORARY: Skip validation and signup for testing navigation
+    console.log('Skipping validation and signup - testing navigation directly');
+    try {
+      navigation.navigate('ProfileSetup' as never);
+      console.log('Navigation attempted');
+    } catch (navError) {
+      console.error('Navigation error:', navError);
+      Alert.alert('Navigation Error', 'Could not navigate to profile setup');
+    }
+    return;
+    
     if (!validateForm()) {
+      console.log('Form validation failed');
       return;
     }
 
+    console.log('Form validation passed, attempting signup');
+
     try {
       await signUp(formData.email, formData.password);
-      // Navigation will be handled by AuthContext based on auth state
+      console.log('Signup successful, navigating to ProfileSetup');
+      // Navigate to profile setup screen after successful signup
+      navigation.navigate('ProfileSetup' as never);
     } catch (error) {
+      console.error('Signup error:', error);
       Alert.alert('Signup Error', error instanceof Error ? error.message : 'An error occurred during signup');
     }
   };
@@ -112,14 +132,18 @@ const SignupScreen: React.FC = () => {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+    <View style={styles.container}>
+      <ScrollView 
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={true}
+        nestedScrollEnabled={true}
+        style={{ flex: 1 }}
+      >
       {/* App Branding/Header */}
       <View style={styles.header}>
-        <Image 
-          source={require('@assets/icons/app-icon.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+        <View style={styles.logoPlaceholder}>
+          <Text style={styles.logoText}>W</Text>
+        </View>
         <Text style={styles.title}>WakeWatch</Text>
         <Text style={styles.subtitle}>Start your wellness journey</Text>
       </View>
@@ -155,7 +179,8 @@ const SignupScreen: React.FC = () => {
           </Text>
         </Text>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -167,15 +192,25 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 24,
     paddingTop: 60,
+    paddingBottom: 200,
   },
   header: {
     alignItems: 'center',
     marginBottom: 40,
   },
-  logo: {
-    width: 120,
-    height: 120,
+  logoPlaceholder: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#f7c256',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 16,
+  },
+  logoText: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#000000',
   },
   title: {
     fontSize: 32,

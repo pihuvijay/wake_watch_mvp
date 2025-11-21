@@ -16,11 +16,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SignupScreen from '@screens/auth/SignupScreen';
 import LoginScreen from '@screens/auth/LoginScreen';
 import ForgotPasswordScreen from '@screens/auth/ForgotPasswordScreen';
+import ProfileSetupScreen from '@screens/auth/ProfileSetupScreen';
 
 export type AuthStackParamList = {
   Signup: undefined;
   Login: undefined;
   ForgotPassword: undefined;
+  ProfileSetup: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -67,6 +69,13 @@ const AuthNavigator: React.FC = () => {
         component={ForgotPasswordScreen}
         options={{
           title: 'Reset Password',
+        }}
+      />
+      <Stack.Screen 
+        name="ProfileSetup" 
+        component={ProfileSetupScreen}
+        options={{
+          title: 'Profile Setup',
         }}
       />
     </Stack.Navigator>
