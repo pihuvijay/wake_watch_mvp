@@ -1,13 +1,13 @@
 /**
  * SocialLogin - Social authentication component
  * 
- * Provides social login options (Google, Facebook) for user authentication.
+ * Provides social login options (Google, Apple) for user authentication.
  * This component is designed to be reusable across different auth screens
  * (signup, login, etc.)
  * 
  * Features:
  * - Google OAuth integration
- * - Facebook OAuth integration
+ * - Apple OAuth integration
  * - Consistent styling with app design system
  * - Loading states for each provider
  * - Error handling for failed authentications
@@ -18,7 +18,7 @@ import { View, StyleSheet } from 'react-native';
 import SocialLoginButton from '@components/auth/SocialLoginButton';
 
 interface SocialLoginProps {
-  onSocialLogin: (provider: 'google' | 'facebook') => Promise<void>;
+  onSocialLogin: (provider: 'google' | 'apple') => Promise<void>;
 }
 
 const SocialLogin: React.FC<SocialLoginProps> = ({ onSocialLogin }) => {
@@ -27,7 +27,7 @@ const SocialLogin: React.FC<SocialLoginProps> = ({ onSocialLogin }) => {
   /**
    * Handles social login with loading state management
    */
-  const handleSocialLogin = async (provider: 'google' | 'facebook') => {
+  const handleSocialLogin = async (provider: 'google' | 'apple') => {
     setLoadingProvider(provider);
     
     try {
@@ -51,14 +51,14 @@ const SocialLogin: React.FC<SocialLoginProps> = ({ onSocialLogin }) => {
         testID="google-login-button"
       />
 
-      {/* Facebook Login Button */}
+      {/* Apple Login Button */}
       <SocialLoginButton
-        provider="facebook"
-        onPress={() => handleSocialLogin('facebook')}
-        loading={loadingProvider === 'facebook'}
+        provider="apple"
+        onPress={() => handleSocialLogin('apple')}
+        loading={loadingProvider === 'apple'}
         disabled={loadingProvider !== null}
         style={styles.socialButton}
-        testID="facebook-login-button"
+        testID="apple-login-button"
       />
     </View>
   );

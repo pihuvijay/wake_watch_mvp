@@ -25,7 +25,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
-  signInWithFacebook: () => Promise<void>;
+  signInWithApple: () => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -176,14 +176,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   /**
-   * Sign in with Facebook OAuth
+   * Sign in with Apple OAuth
    */
-  const signInWithFacebook = async (): Promise<void> => {
+  const signInWithApple = async (): Promise<void> => {
     setLoading(true);
     
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'facebook',
+        provider: 'apple',
         options: {
           redirectTo: window.location.origin,
         },
@@ -193,7 +193,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw error;
       }
     } catch (error) {
-      console.error('Facebook signin error:', error);
+      console.error('Apple signin error:', error);
       throw error;
     } finally {
       setLoading(false);
@@ -208,7 +208,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signIn,
     signOut,
     signInWithGoogle,
-    signInWithFacebook,
+    signInWithApple,
   };
 
   return (

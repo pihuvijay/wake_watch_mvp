@@ -4,7 +4,7 @@
  * This is the primary signup screen that users see when creating a new account.
  * Based on the Figma wireframe, it includes:
  * - Email and password input fields
- * - Social login options (Google, Facebook)
+ * - Social login options (Google, Apple)
  * - Form validation and error handling
  * - Navigation to login screen
  * 
@@ -18,10 +18,11 @@ import { useNavigation } from '@react-navigation/native';
 import SignupForm from './SignupForm';
 import SocialLogin from './SocialLogin';
 import { useAuth } from '@hooks/useAuth';
-import { validateEmail, validatePassword } from '@utils/validation/authValidation';
+import { validateEmail, validatePassword, validatePhoneNumber } from '@utils/validation/authValidation';
 
 interface SignupFormData {
   email: string;
+  phoneNumber: string;
   password: string;
   confirmPassword: string;
 }
@@ -31,6 +32,7 @@ const SignupScreen: React.FC = () => {
   const { signUp, loading } = useAuth();
   const [formData, setFormData] = useState<SignupFormData>({
     email: '',
+    phoneNumber: '',
     password: '',
     confirmPassword: ''
   });
@@ -46,6 +48,12 @@ const SignupScreen: React.FC = () => {
     // Email validation
     if (!validateEmail(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
+    }
+
+    // Phone number validation
+    const phoneValidation = validatePhoneNumber(formData.phoneNumber);
+    if (!phoneValidation.isValid) {
+      newErrors.phoneNumber = phoneValidation.message;
     }
 
     // Password validation
@@ -80,9 +88,9 @@ const SignupScreen: React.FC = () => {
   };
 
   /**
-   * Handles social login (Google, Facebook)
+   * Handles social login (Google, Apple)
    */
-  const handleSocialLogin = async (provider: 'google' | 'facebook') => {
+  const handleSocialLogin = async (provider: 'google' | 'apple') => {
     try {
       // Social login logic will be implemented in useAuth hook
       console.log(`Social login with ${provider}`);
@@ -107,9 +115,11 @@ const SignupScreen: React.FC = () => {
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       {/* App Branding/Header */}
       <View style={styles.header}>
-        <View style={styles.logoPlaceholder}>
-          <Text style={styles.logoText}>W</Text>
-        </View>
+        <Image 
+          source={require('@assets/icons/app-icon.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
         <Text style={styles.title}>WakeWatch</Text>
         <Text style={styles.subtitle}>Start your wellness journey</Text>
       </View>
@@ -162,19 +172,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 40,
   },
-  logoPlaceholder: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#f7c256',
-    alignItems: 'center',
-    justifyContent: 'center',
+  logo: {
+    width: 120,
+    height: 120,
     marginBottom: 16,
-  },
-  logoText: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#000000',
   },
   title: {
     fontSize: 32,

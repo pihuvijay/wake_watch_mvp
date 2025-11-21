@@ -1,7 +1,7 @@
 /**
  * SocialLoginButton - Social authentication button component
  * 
- * Provides styled buttons for social login providers (Google, Facebook).
+ * Provides styled buttons for social login providers (Google, Apple).
  * Each button includes the appropriate branding, colors, and icons
  * according to the provider's brand guidelines.
  * 
@@ -17,7 +17,7 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, View } from 'react-native';
 
 interface SocialLoginButtonProps {
-  provider: 'google' | 'facebook';
+  provider: 'google' | 'apple';
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
@@ -45,13 +45,13 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
           borderColor: '#e0e0e0',
           icon: 'G', // Placeholder - would use actual Google icon
         };
-      case 'facebook':
+      case 'apple':
         return {
-          title: 'Continue with Facebook',
-          backgroundColor: '#1877F2',
+          title: 'Continue with Apple',
+          backgroundColor: '#000000',
           textColor: '#ffffff',
-          borderColor: '#1877F2',
-          icon: 'f', // Placeholder - would use actual Facebook icon
+          borderColor: '#000000',
+          icon: '', // Placeholder - would use actual Apple icon
         };
       default:
         return {
