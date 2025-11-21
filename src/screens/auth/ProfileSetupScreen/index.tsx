@@ -127,9 +127,9 @@ const ProfileSetupScreen: React.FC<ProfileSetupScreenProps> = ({ onComplete }) =
     if (onComplete) {
       onComplete(profileData);
     } else {
-      // Navigate to main app
+      // Navigate to main app dashboard
       console.log('Profile setup completed:', profileData);
-      // navigation.navigate('Main' as never);
+      navigation.navigate('Dashboard' as never);
     }
   };
 
