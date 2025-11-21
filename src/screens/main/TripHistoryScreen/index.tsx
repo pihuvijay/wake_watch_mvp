@@ -31,6 +31,7 @@ const AlertTriangleIcon = () => <Text style={styles.iconText}>⚠️</Text>;
 const HomeIcon = () => <Text style={styles.iconText}>🏠</Text>;
 const BarChartIcon = () => <Text style={styles.iconText}>📊</Text>;
 const SettingsIcon = () => <Text style={styles.iconText}>⚙️</Text>;
+const BellIcon = () => <Text style={styles.iconText}>🔔</Text>;
 const UserIcon = () => <Text style={styles.iconText}>👤</Text>;
 const ChevronRightIcon = () => <Text style={styles.iconText}>›</Text>;
 
@@ -133,6 +134,8 @@ const TripHistoryScreen: React.FC<TripHistoryProps> = ({ onNavigate }) => {
         navigation.navigate('Settings' as never);
       } else if (screen === 'analytics') {
         navigation.navigate('Analytics' as never);
+      } else if (screen === 'notifications') {
+        navigation.navigate('Notifications' as never);
       }
     }
   };
@@ -331,10 +334,10 @@ const TripHistoryScreen: React.FC<TripHistoryProps> = ({ onNavigate }) => {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.navItem}
-          onPress={() => handleNavigate('profile')}
+          onPress={() => handleNavigate('notifications')}
         >
-          <UserIcon />
-          <Text style={styles.navText}>Profile</Text>
+          <BellIcon />
+          <Text style={styles.navText}>Notifications</Text>
         </TouchableOpacity>
       </View>
     </View>

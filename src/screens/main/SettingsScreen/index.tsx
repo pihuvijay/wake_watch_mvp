@@ -58,6 +58,7 @@ const SettingsScreen: React.FC<SettingsProps> = ({ onNavigate }) => {
     else if (screen === 'trip-history') navigation.navigate('TripHistory' as never);
     else if (screen === 'analytics') navigation.navigate('Analytics' as never);
     else if (screen === 'settings') navigation.navigate('Settings' as never);
+    else if (screen === 'notifications') navigation.navigate('Notifications' as never);
   };
 
   const openPicker = (
@@ -474,9 +475,9 @@ const SettingsScreen: React.FC<SettingsProps> = ({ onNavigate }) => {
           <SettingsCogIcon />
           <Text style={[styles.navText, styles.activeNavText]}>Settings</Text>
         </View>
-        <TouchableOpacity style={styles.navItem} onPress={() => {}}>
-          <UserIcon />
-          <Text style={styles.navText}>Profile</Text>
+        <TouchableOpacity style={styles.navItem} onPress={() => handleNavigate('notifications')}>
+          <BellIcon />
+          <Text style={styles.navText}>Notifications</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -31,6 +31,7 @@ const ClockIcon = () => <Text style={styles.iconText}>🕐</Text>;
 const FlameIcon = () => <Text style={styles.iconText}>🔥</Text>;
 const HomeIcon = () => <Text style={styles.iconText}>🏠</Text>;
 const BarChartIcon = () => <Text style={styles.iconText}>📊</Text>;
+const BellIcon = () => <Text style={styles.iconText}>🔔</Text>;
 const SettingsIcon = () => <Text style={styles.iconText}>⚙️</Text>;
 const UserIcon = () => <Text style={styles.iconText}>👤</Text>;
 const ChevronRightIcon = () => <Text style={styles.iconText}>›</Text>;
@@ -82,6 +83,8 @@ const DashboardScreen: React.FC<DashboardProps> = ({ onNavigate }) => {
         navigation.navigate('Analytics' as never);
       } else if (screen === 'settings') {
         navigation.navigate('Settings' as never);
+      } else if (screen === 'notifications') {
+        navigation.navigate('Notifications' as never);
       }
     }
   };
@@ -296,10 +299,10 @@ const DashboardScreen: React.FC<DashboardProps> = ({ onNavigate }) => {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.navItem}
-          onPress={() => handleNavigate('profile')}
+          onPress={() => handleNavigate('notifications')}
         >
-          <UserIcon />
-          <Text style={styles.navText}>Profile</Text>
+          <BellIcon />
+          <Text style={styles.navText}>Notifications</Text>
         </TouchableOpacity>
       </View>
     </View>
