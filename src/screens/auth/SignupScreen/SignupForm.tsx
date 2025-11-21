@@ -21,6 +21,7 @@ import PasswordStrengthIndicator from '@components/auth/PasswordStrengthIndicato
 
 interface SignupFormData {
   email: string;
+  phoneNumber: string;
   password: string;
   confirmPassword: string;
 }
@@ -54,6 +55,21 @@ const SignupForm: React.FC<SignupFormProps> = ({
           autoCorrect={false}
           error={errors.email}
           testID="signup-email-input"
+        />
+      </View>
+
+      {/* Phone Number Input */}
+      <View style={styles.inputContainer}>
+        <Input
+          label="Phone Number"
+          placeholder="Enter your phone number"
+          value={formData.phoneNumber}
+          onChangeText={(value) => onUpdateField('phoneNumber', value)}
+          keyboardType="phone-pad"
+          autoCapitalize="none"
+          autoCorrect={false}
+          error={errors.phoneNumber}
+          testID="signup-phone-input"
         />
       </View>
 
