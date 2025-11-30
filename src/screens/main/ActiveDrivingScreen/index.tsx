@@ -5,30 +5,35 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import { useBlinkDetection } from '../../../hooks/cv';
 
 // Emoji icons for consistency
-const PauseIcon = () => <Text style={styles.iconText}>⏸️</Text>;
-const MapPinIcon = () => <Text style={styles.iconText}>📍</Text>;
-const CloseIcon = () => <Text style={styles.iconText}>✖️</Text>;
-const PhoneIcon = () => <Text style={styles.iconText}>📞</Text>;
+const PauseIcon = () => <Text style={{ fontSize: 20 }}>⏸️</Text>;
+const MapPinIcon = () => <Text style={{ fontSize: 20 }}>📍</Text>;
+const CloseIcon = () => <Text style={{ fontSize: 20 }}>✖️</Text>;
+const PhoneIcon = () => <Text style={{ fontSize: 20 }}>📞</Text>;
 
 const ActiveDrivingScreen: React.FC = () => {
   const navigation = useNavigation();
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [drowsinessLevel, setDrowsinessLevel] = useState(20); // 0-100
   const [speed, setSpeed] = useState(45);
   const [distance, setDistance] = useState(12.3);
   const [warningCount, setWarningCount] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState<'warning' | 'critical'>('warning');
+  const [permission, requestPermission] = useCameraPermissions();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Use computer vision for blink detection
+  const { isBlinkingTooMuch, blinkRate, eyeAspectRatio, alertLevel } = useBlinkDetection();
+  
+  // Convert CV alert level to legacy alert type
+  const alertType = alertLevel === 'critical' ? 'critical' : 'warning';
+  const drowsinessLevel = isBlinkingTooMuch ? (alertLevel === 'critical' ? 90 : 75) : Math.round(eyeAspectRatio * 100);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       setElapsedTime((prev) => prev + 1);
-      // Simulate drowsiness detection
-      const randomChange = Math.random() * 10 - 5;
-      setDrowsinessLevel((prev) => Math.max(0, Math.min(100, prev + randomChange)));
       // Simulate speed changes
       setSpeed((prev) => Math.max(0, Math.min(80, prev + (Math.random() * 4 - 2))));
       // Simulate distance
@@ -39,17 +44,24 @@ const ActiveDrivingScreen: React.FC = () => {
     };
   }, []);
 
+  // Request camera permissions
   useEffect(() => {
-    if (drowsinessLevel > 70 && drowsinessLevel < 85 && !showAlert) {
-      setAlertType('warning');
-      setShowAlert(true);
-      setWarningCount((prev) => prev + 1);
-    } else if (drowsinessLevel >= 85 && !showAlert) {
-      setAlertType('critical');
-      setShowAlert(true);
-      setWarningCount((prev) => prev + 1);
+    if (!permission?.granted) {
+      requestPermission();
     }
-  }, [drowsinessLevel, showAlert]);
+  }, [permission, requestPermission]);
+
+  useEffect(() => {
+    if (alertLevel === 'warning' && !showAlert) {
+      setShowAlert(true);
+      setWarningCount((prev) => prev + 1);
+    } else if (alertLevel === 'critical' && !showAlert) {
+      setShowAlert(true);
+      setWarningCount((prev) => prev + 1);
+    } else if (alertLevel === 'normal') {
+      setShowAlert(false);
+    }
+  }, [alertLevel, showAlert]);
 
   const formatTime = (seconds: number) => {
     const hrs = Math.floor(seconds / 3600);
@@ -75,8 +87,8 @@ const ActiveDrivingScreen: React.FC = () => {
 
   const handleNavigate = (screen: string) => {
     if (screen === 'map-view') {
-      // Placeholder: send to TripHistory for now
-      navigation.navigate('TripHistory' as never);
+      // Placeholder: just log for now
+      console.log('Map view requested');
     } else if (screen === 'dashboard') {
       navigation.goBack();
     }
@@ -84,12 +96,26 @@ const ActiveDrivingScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Camera feed simulation background */}
-      <View style={styles.cameraBg}>
-        <View style={styles.cameraOverlay}>
-          <View style={styles.faceOval} />
+      {/* Camera feed */}
+      {permission?.granted ? (
+        <CameraView 
+          style={styles.camera} 
+          facing="front"
+        >
+          <View style={styles.cameraOverlay}>
+            <View style={styles.faceOval} />
+          </View>
+        </CameraView>
+      ) : (
+        <View style={styles.cameraBg}>
+          <View style={styles.cameraOverlay}>
+            <Text style={styles.cameraPermissionText}>
+              {permission?.granted === false ? 'Camera access denied' : 'Requesting camera access...'}
+            </Text>
+            <View style={styles.faceOval} />
+          </View>
         </View>
-      </View>
+      )}
 
       {/* Warning Overlay */}
       {showAlert && alertType === 'warning' && (
@@ -165,7 +191,11 @@ const ActiveDrivingScreen: React.FC = () => {
       <View style={styles.eyeStatus}>
         <View style={styles.eyeCard}>
           <Text style={styles.smallMuted}>Eye Aspect</Text>
-          <Text style={{ color: getDrowsinessColor() }}>{(1 - drowsinessLevel / 100).toFixed(2)}</Text>
+          <Text style={{ color: getDrowsinessColor() }}>{eyeAspectRatio.toFixed(2)}</Text>
+        </View>
+        <View style={[styles.eyeCard, { marginTop: 8 }]}>
+          <Text style={styles.smallMuted}>Blink Rate</Text>
+          <Text style={{ color: getDrowsinessColor() }}>{blinkRate}/min</Text>
         </View>
       </View>
 
@@ -218,8 +248,10 @@ const ActiveDrivingScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#000000' },
+  camera: { position: 'absolute', inset: 0 as any, left: 0, right: 0, top: 0, bottom: 0 },
   cameraBg: { position: 'absolute', inset: 0 as any, left: 0, right: 0, top: 0, bottom: 0 },
   cameraOverlay: { flex: 1, alignItems: 'center', justifyContent: 'center', opacity: 0.1 },
+  cameraPermissionText: { color: '#ffffff', fontSize: 16, marginBottom: 20, textAlign: 'center' },
   faceOval: { width: 192, height: 256, borderWidth: 2, borderColor: '#FF8C00', borderRadius: 128 },
 
   warningOverlay: { position: 'absolute', inset: 0 as any, left: 0, right: 0, top: 0, bottom: 0, backgroundColor: 'rgba(245, 158, 11, 0.2)', borderWidth: 4, borderColor: '#F59E0B', zIndex: 40, alignItems: 'center', justifyContent: 'center' },
