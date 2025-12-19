@@ -48,3 +48,27 @@ button, [role="button"] {
     user-select: auto;
   }
 }
+
+/* Fix bottom navigation positioning for PWA */
+[data-testid="bottom-nav"], 
+.bottom-nav,
+[style*="position: absolute"][style*="bottom: 0"] {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+}
+
+/* Ensure main content has bottom padding for fixed nav */
+.main-content,
+[data-testid="scroll-view"],
+.rn-scroll-view {
+  padding-bottom: 80px !important;
+}
+
+/* Fix for React Native Web absolute positioning */
+[style*="position: absolute"][style*="bottom: 0"][style*="flexDirection: row"] {
+  position: fixed !important;
+  z-index: 1000 !important;
+}
