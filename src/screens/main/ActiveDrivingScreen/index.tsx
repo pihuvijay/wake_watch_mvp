@@ -5,6 +5,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import CameraFeed from '@components/common/CameraFeed';
 
 // Emoji icons for consistency
 const PauseIcon = () => <Text style={styles.iconText}>⏸️</Text>;
@@ -21,6 +22,7 @@ const ActiveDrivingScreen: React.FC = () => {
   const [warningCount, setWarningCount] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState<'warning' | 'critical'>('warning');
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -38,6 +40,26 @@ const ActiveDrivingScreen: React.FC = () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, []);
+
+  // Handle camera ready
+  const handleCameraReady = (stream: MediaStream) => {
+    setCameraStream(stream);
+    console.log('Camera feed ready for drowsiness detection');
+  };
+
+  // Handle camera error
+  const handleCameraError = (error: Error) => {
+    console.warn('Camera error:', error.message);
+  };
+
+  // Cleanup camera on unmount
+  useEffect(() => {
+    return () => {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [cameraStream]);
 
   useEffect(() => {
     if (drowsinessLevel > 70 && drowsinessLevel < 85 && !showAlert) {
@@ -84,12 +106,13 @@ const ActiveDrivingScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Camera feed simulation background */}
-      <View style={styles.cameraBg}>
-        <View style={styles.cameraOverlay}>
-          <View style={styles.faceOval} />
-        </View>
-      </View>
+      {/* Real Camera Feed */}
+      <CameraFeed
+        style={styles.cameraFeed}
+        onCameraReady={handleCameraReady}
+        onError={handleCameraError}
+        facingMode="user"
+      />
 
       {/* Warning Overlay */}
       {showAlert && alertType === 'warning' && (
@@ -218,6 +241,7 @@ const ActiveDrivingScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#000000' },
+  cameraFeed: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
   cameraBg: { position: 'absolute', inset: 0 as any, left: 0, right: 0, top: 0, bottom: 0 },
   cameraOverlay: { flex: 1, alignItems: 'center', justifyContent: 'center', opacity: 0.1 },
   faceOval: { width: 192, height: 256, borderWidth: 2, borderColor: '#FF8C00', borderRadius: 128 },

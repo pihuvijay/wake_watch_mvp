@@ -24,6 +24,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Input from '@components/common/Input';
 import Button from '@components/common/Button';
+import CameraButton from '@components/common/CameraButton';
+import { CameraResult } from '@/services/CameraService';
 
 interface EmergencyContact {
   name: string;
@@ -53,6 +55,7 @@ const ProfileSetupScreen: React.FC<ProfileSetupScreenProps> = ({ onComplete }) =
   const [emergencyContacts, setEmergencyContacts] = useState<EmergencyContact[]>([
     { name: '', phone: '' }
   ]);
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
 
   // Driver type options
   const driverTypes = [
@@ -102,6 +105,13 @@ const ProfileSetupScreen: React.FC<ProfileSetupScreenProps> = ({ onComplete }) =
   };
 
   /**
+   * Handle camera photo selection
+   */
+  const handlePhotoSelected = (result: CameraResult) => {
+    setProfilePhoto(result.uri);
+  };
+
+  /**
    * Handle form submission
    */
   const handleSubmit = () => {
@@ -143,14 +153,11 @@ const ProfileSetupScreen: React.FC<ProfileSetupScreenProps> = ({ onComplete }) =
 
       {/* Profile Photo Section */}
       <View style={styles.photoSection}>
-        <View style={styles.photoContainer}>
-          <View style={styles.photoPlaceholder}>
-            <Text style={styles.photoIcon}>👤</Text>
-          </View>
-          <TouchableOpacity style={styles.cameraButton}>
-            <Text style={styles.cameraIcon}>📷</Text>
-          </TouchableOpacity>
-        </View>
+        <CameraButton
+          onImageSelected={handlePhotoSelected}
+          currentImage={profilePhoto || undefined}
+          style={styles.photoContainer}
+        />
         <Text style={styles.photoText}>Tap to upload photo</Text>
       </View>
 
