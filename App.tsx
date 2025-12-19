@@ -10,6 +10,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { AuthProvider } from '@contexts/AuthContext';
 import { ThemeProvider } from '@contexts/ThemeContext';
 import AppNavigator from '@/navigation/AppNavigator';
+import { Platform } from 'react-native';
+
+// Import CSS for web platform to fix PWA scrolling
+if (Platform.OS === 'web') {
+  require('./web-styles.css');
+}
 
 export default function App() {
   return (

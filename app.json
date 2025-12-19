@@ -4,10 +4,8 @@
     "slug": "wakewatch",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,12 +17,28 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "display": "standalone",
+      "orientation": "portrait",
+      "startUrl": "/",
+      "backgroundColor": "#ffffff",
+      "themeColor": "#ffffff",
+      "name": "WakeWatch",
+      "shortName": "WakeWatch",
+      "description": "Progressive Web App for sleep tracking and wellness",
+      "lang": "en",
+      "scope": "/",
+      "bundler": "webpack",
+      "viewport": {
+        "width": "device-width",
+        "initialScale": 1,
+        "maximumScale": 1,
+        "userScalable": false,
+        "viewportFit": "cover"
+      }
     }
   }
 }

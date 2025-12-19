@@ -1,0 +1,50 @@
+/* PWA Scrolling and Touch Fixes */
+html, body {
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: manipulation;
+}
+
+#root {
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure ScrollView components work properly */
+.rn-scroll-view {
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
+}
+
+/* Fix for React Native Web scrolling */
+[data-focusable="true"] {
+  outline: none;
+}
+
+/* Prevent zoom on input focus */
+input, textarea, select {
+  font-size: 16px;
+}
+
+/* Ensure proper touch targets */
+button, [role="button"] {
+  touch-action: manipulation;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Fix for standalone PWA display */
+@media all and (display-mode: standalone) {
+  body {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection in specific areas */
+  input, textarea, [contenteditable] {
+    -webkit-user-select: auto;
+    user-select: auto;
+  }
+}
